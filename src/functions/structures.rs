@@ -10,4 +10,3 @@ pub struct Mikrotik {
     pub name: String,
     pub ipv4: String,
 }
-

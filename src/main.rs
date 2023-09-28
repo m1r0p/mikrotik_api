@@ -1,9 +1,9 @@
 mod functions;
 use functions::*;
 
-use std::error::Error;
+//use std::error::Error;
 use std::env;
-use std::fs;
+//use std::fs;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -20,7 +20,5 @@ fn main() {
         i = i + 1;
     }
 
-    let config_content =
-        fs::read_to_string(&config_path).expect("Should have been able to read the file");
-    println!("{}", config_content);
+    config_parse(config_path);
 }
