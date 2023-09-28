@@ -6,7 +6,7 @@ pub use structures::Mikrotik;
 //use std::fs;
 //use config::DefaultConfigurationBuilder;
 use std::path::PathBuf;
-use config::builder::ConfigBuilder
+use config::builder::ConfigBuilder;
 
 //pub use crate::builder::AsyncConfigBuilder;
 //pub use crate::builder::ConfigBuilder;
