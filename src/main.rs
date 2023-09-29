@@ -10,15 +10,22 @@ fn main() {
     let mut config_path: String = String::new();
     let mut i: usize = 0;
     for word in args.iter() {
-        match word.as_str() {
-            // Checking for --config directive
-            "--config" => config_path.push_str(args[i + 1].as_str()),
+        //match word.as_str() {
+        //    // Checking for --config directive
+        //    "--config" => config_path.push_str(args[i + 1].as_str()),
 
-            &_ => println!("directive haven't find"),
+        //    &_ => continue,
+        //}
+
+        if word.as_str().eq("--config") {
+            config_path.push_str(args[i + 1].as_str());
         }
 
         i = i + 1;
     }
 
-    config_parse(config_path);
+    let vec_config: Vec<String> = config_parse(config_path).unwrap();
+    for i in vec_config.iter() {
+        println!("{}", i);
+    }
 }

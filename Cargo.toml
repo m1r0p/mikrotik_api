@@ -8,5 +8,5 @@ edition = "2021"
 [dependencies]
 serde_json = "1.0.104"
 serde = {version = "1.0.179", features = ["derive"]}
-#config = "0.13.3"
-more-config = "1.0.2"
+config = "0.13.3"
+#more-config = "1.0.2"
