@@ -3,19 +3,19 @@ pub mod conf;
 pub mod structures;
 pub use structures::Mikrotik;
 
-//use std::error::Error;
+use std::error::Error;
 //use std::fs;
 //use config::DefaultConfigurationBuilder;
 //use std::path::PathBuf;
 //use config::builder::ConfigBuilder;
-use config::{Config, ConfigError, File, FileFormat};
+use config::{Config, File, FileFormat};
 
 //fn print_type_of<T>(_: &T) {
 //    println!("{}", std::any::type_name::<T>())
 //}
 
-//pub fn config_parse(string_path: String) -> Result<Vec<String>, Box<dyn Error>> {
-pub fn config_parse(string_path: String) -> Result<Vec<String>, ConfigError> {
+pub fn config_parse(string_path: String) -> Result<Vec<String>, Box<dyn Error>> {
+//pub fn config_parse(string_path: String) -> Result<Vec<String>, ConfigError> {
     //let config_content =
     //    fs::read_to_string(&config_path).expect("Should have been able to read the file");
 
@@ -31,10 +31,10 @@ pub fn config_parse(string_path: String) -> Result<Vec<String>, ConfigError> {
     builder = builder.set_override("override", "1")?;
 
     //match builder.build() {
-    //    Ok(config) => {
-    //        credentials.push(config.get("ip").unwrap());
-    //        credentials.push(config.get("user").unwrap());
-    //        credentials.push(config.get("password").unwrap());
+    //    Ok(raw_conf) => {
+    //        credentials.push(raw_conf.get("ip").unwrap());
+    //        credentials.push(raw_conf.get("user").unwrap());
+    //        credentials.push(raw_conf.get("password").unwrap());
 
     //        return Ok(credentials);
     //    }
@@ -43,13 +43,9 @@ pub fn config_parse(string_path: String) -> Result<Vec<String>, ConfigError> {
     //    }
     //}
 
-    match builder.build() {
-        Ok(raw_conf) => {
-            credentials.push(raw_conf.get("ip").unwrap());
-            credentials.push(raw_conf.get("user").unwrap());
-            credentials.push(raw_conf.get("password").unwrap());
-        }
-        Err(e) => return Err(e),
-    }
+    let raw_conf = builder.build().unwrap();
+    credentials.push(raw_conf.get("ip").unwrap());
+    credentials.push(raw_conf.get("user").unwrap());
+    credentials.push(raw_conf.get("password").unwrap());
     return Ok(credentials);
 }
