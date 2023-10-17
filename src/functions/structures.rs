@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 //use serde_json::Result;
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Mikrotik {
+pub struct Host {
     pub id: u32,
     pub host: String,
     pub name: String,

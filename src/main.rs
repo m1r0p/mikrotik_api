@@ -24,7 +24,7 @@ fn main() {
         i = i + 1;
     }
 
-    let vec_config: Vec<String> = config_parse(config_path).unwrap();
+    let vec_config: Vec<String> = get_mikrotik_params(config_path).unwrap();
     for i in vec_config.iter() {
         println!("{}", i);
     }
