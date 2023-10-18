@@ -124,7 +124,7 @@ pub async fn get_dhcp_leases(mikrotik_params: Vec<String>) -> Result<Vec<Host>, 
         //} else {
         //    dhcp_option.push_str(i["dhcp-option"].as_str().unwrap());
         //}
-        
+
         //let mut address_lists: String = String::new();
         //match i["address-lists"].as_str() {
         //    None => address_lists.push_str("None"),
@@ -146,10 +146,9 @@ pub async fn get_dhcp_leases(mikrotik_params: Vec<String>) -> Result<Vec<Host>, 
         //    Some(x) => active_address.push_str(x),
         //}
 
-
         //let host: Host = Host {
         //    id: i[".id"].as_str().unwrap().to_string(),
-        //    active_address: active_address, 
+        //    active_address: active_address,
         //    active_client_id: i["active-client-id"].as_str().unwrap().to_string(),
         //    active_mac_address: i["active-mac-address"].as_str().unwrap().to_string(),
         //    active_server: i["active-server"].as_str().unwrap().to_string(),
