@@ -25,7 +25,11 @@ fn main() {
     }
 
     let vec_config: Vec<String> = get_mikrotik_params(config_path).unwrap();
-    for i in vec_config.iter() {
-        println!("{}", i);
+    //for i in vec_config.iter() {
+    //    println!("{}", i);
+    //}
+    let mikrotik_leases: Vec<Host> = get_dhcp_leases(vec_config).unwrap();
+    for i in mikrotik_leases.iter() {
+        println!("{:?}", i);
     }
 }

@@ -1,17 +1,17 @@
 #[allow(dead_code)]
-
 pub mod conf;
-pub use conf::{REST_PROTO, REST_DHCP_LEASES};
+pub use conf::{MIKROTIK_DHCP_LEASES, MIKROTIK_PROTO};
 pub mod structures;
 pub use structures::Host;
 
-use std::error::Error;
 use config::{Config, File, FileFormat};
-use reqwest::header::{HeaderMap, AUTHORIZATION, CONTENT_TYPE};
+//use reqwest::header::{HeaderMap, AUTHORIZATION, CONTENT_TYPE};
+use std::error::Error;
+use serde_json::{Value};
 
-//fn print_type_of<T>(_: &T) {
-//    println!("{}", std::any::type_name::<T>())
-//}
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
+}
 
 pub fn get_mikrotik_params(string_path: String) -> Result<Vec<String>, Box<dyn Error>> {
     let mut mikrotik_params: Vec<String> = Vec::new();
@@ -91,3 +91,28 @@ pub fn get_mikrotik_params(string_path: String) -> Result<Vec<String>, Box<dyn E
 //
 //    return Ok(dhcp_hosts);
 //}
+
+#[tokio::main]
+pub async fn get_dhcp_leases(mikrotik_params: Vec<String>) -> Result<Vec<Host>, Box<dyn Error>> {
+    let mut dhcp_leases: Vec<Host> = Vec::new();
+    let client = reqwest::Client::new();
+    let user_name: String = mikrotik_params[1].to_string();
+    let password: Option<String> = Some(mikrotik_params[2].to_string());
+
+    let resp = client
+        .get(format!("{}{}{}", MIKROTIK_PROTO, mikrotik_params[0], MIKROTIK_DHCP_LEASES))
+        .basic_auth(user_name, password)
+        .send()
+        .await?
+        .text()
+        .await?;
+    let hosts_json: Value = serde_json::from_str(resp.as_str()).unwrap();
+    //let hosts_vec: &Vec<Value> = hosts_json["Array"].as_array().unwrap();
+    for i in hosts_json.iter() {
+        println!("{:?}", i);
+    }
+
+    //println!("{:?}", &hosts_json);
+    //print_type_of(&hosts_json);
+    return Ok(dhcp_leases);
+}

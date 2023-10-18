@@ -1,4 +1,4 @@
 //////// config
 #[allow(dead_code)]
-pub const REST_PROTO: &str = "http";
-pub const REST_DHCP_LEASES: &str = "/rest/ip/dhcp-server/lease";
+pub const MIKROTIK_PROTO: &str = "http://";
+pub const MIKROTIK_DHCP_LEASES: &str = "/rest/ip/dhcp-server/lease";
