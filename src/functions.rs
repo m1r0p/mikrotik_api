@@ -1,13 +1,11 @@
+#[allow(dead_code)]
+
 pub mod conf;
-//pub use conf::API_URL;
+pub use conf::{REST_PROTO, REST_DHCP_LEASES};
 pub mod structures;
 pub use structures::Host;
 
 use std::error::Error;
-//use std::fs;
-//use config::DefaultConfigurationBuilder;
-//use std::path::PathBuf;
-//use config::builder::ConfigBuilder;
 use config::{Config, File, FileFormat};
 use reqwest::header::{HeaderMap, AUTHORIZATION, CONTENT_TYPE};
 
