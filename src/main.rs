@@ -24,11 +24,11 @@ fn main() {
         i = i + 1;
     }
 
-    let vec_config: Vec<String> = get_mikrotik_params(config_path).unwrap();
+    let vec_config: Vec<String> = get_config_params(config_path).unwrap();
     //for i in vec_config.iter() {
     //    println!("{}", i);
     //}
-    let mikrotik_leases: Vec<MikrotikLease> = get_dhcp_leases(vec_config).unwrap();
+    let mikrotik_leases: Vec<MikrotikLease> = get_mikrotik_leases(vec_config).unwrap();
     for i in mikrotik_leases.iter() {
         //let mut host_name: String = String::new();
         //match &i.host_name {
@@ -46,6 +46,9 @@ fn main() {
         //    None => active_mac_address.push_str("None"),
         //}
 
-        println!("{}\t\t\t{}\t\t{}", i.host_name, i.active_address, i.active_mac_address);
+        println!(
+            "{}\t\t\t{}\t\t{}",
+            i.host_name, i.active_address, i.active_mac_address
+        );
     }
 }
