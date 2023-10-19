@@ -49,7 +49,7 @@ pub async fn get_mikrotik_leases(
         .await?;
     let hosts_json: Value = serde_json::from_str(resp.as_str()).unwrap();
     let hosts_vec: &Vec<Value> = hosts_json.as_array().unwrap();
-    
+
     for i in hosts_vec.iter() {
         let mut id: String = String::new();
         match i[".id"].as_str() {
