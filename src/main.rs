@@ -28,7 +28,7 @@ fn main() {
     //for i in vec_config.iter() {
     //    println!("{}", i);
     //}
-    let mikrotik_leases: Vec<Host> = get_dhcp_leases(vec_config).unwrap();
+    let mikrotik_leases: Vec<MikrotikLease> = get_dhcp_leases(vec_config).unwrap();
     for i in mikrotik_leases.iter() {
         //let mut host_name: String = String::new();
         //match &i.host_name {

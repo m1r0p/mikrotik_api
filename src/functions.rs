@@ -2,7 +2,7 @@
 pub mod conf;
 pub use conf::{MIKROTIK_DHCP_LEASES, MIKROTIK_PROTO};
 pub mod structures;
-pub use structures::Host;
+pub use structures::MikrotikLease;
 
 use config::{Config, File, FileFormat};
 //use reqwest::header::{HeaderMap, AUTHORIZATION, CONTENT_TYPE};
@@ -93,8 +93,8 @@ pub fn get_mikrotik_params(string_path: String) -> Result<Vec<String>, Box<dyn E
 //}
 
 #[tokio::main]
-pub async fn get_dhcp_leases(mikrotik_params: Vec<String>) -> Result<Vec<Host>, Box<dyn Error>> {
-    let mut dhcp_leases: Vec<Host> = Vec::new();
+pub async fn get_dhcp_leases(mikrotik_params: Vec<String>) -> Result<Vec<MikrotikLease>, Box<dyn Error>> {
+    let mut dhcp_leases: Vec<MikrotikLease> = Vec::new();
     let client = reqwest::Client::new();
     let user_name: String = mikrotik_params[1].to_string();
     let password: Option<String> = Some(mikrotik_params[2].to_string());
@@ -227,7 +227,7 @@ pub async fn get_dhcp_leases(mikrotik_params: Vec<String>) -> Result<Vec<Host>, 
             Some(x) => status.push_str(x),
         }
 
-        let host: Host = Host {
+        let host: MikrotikLease = MikrotikLease {
             id: id, 
             active_address: active_address,
             active_client_id: active_client_id,
