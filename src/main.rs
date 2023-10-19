@@ -30,22 +30,22 @@ fn main() {
     //}
     let mikrotik_leases: Vec<Host> = get_dhcp_leases(vec_config).unwrap();
     for i in mikrotik_leases.iter() {
-        let mut host_name: String = String::new();
-        match &i.host_name {
-            Some(x) => host_name.push_str(x),
-            None => host_name.push_str("None"),
-        }
-        let mut active_address: String = String::new();
-        match &i.active_address {
-            Some(x) => active_address.push_str(x),
-            None => active_address.push_str("None"),
-        }
-        let mut active_mac_address: String = String::new();
-        match &i.active_mac_address {
-            Some(x) => active_mac_address.push_str(x),
-            None => active_mac_address.push_str("None"),
-        }
+        //let mut host_name: String = String::new();
+        //match &i.host_name {
+        //    Some(x) => host_name.push_str(x),
+        //    None => host_name.push_str("None"),
+        //}
+        //let mut active_address: String = String::new();
+        //match &i.active_address {
+        //    Some(x) => active_address.push_str(x),
+        //    None => active_address.push_str("None"),
+        //}
+        //let mut active_mac_address: String = String::new();
+        //match &i.active_mac_address {
+        //    Some(x) => active_mac_address.push_str(x),
+        //    None => active_mac_address.push_str("None"),
+        //}
 
-        println!("{}\t\t\t{}\t\t{}", host_name, active_address, active_mac_address);
+        println!("{}\t\t\t{}\t\t{}", i.host_name, i.active_address, i.active_mac_address);
     }
 }
