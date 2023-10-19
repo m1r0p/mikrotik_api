@@ -1,6 +1,6 @@
 #[allow(dead_code)]
 pub mod conf;
-pub use conf::{MIKROTIK_DHCP_LEASES, MIKROTIK_PROTO};
+pub use conf::{MIKROTIK_DHCP_LEASES, MIKROTIK_PROTO, PHPIPAM_ADDRESS, PHPIPAM_REST_SUBNETS};
 pub mod structures;
 pub use structures::MikrotikLease;
 
@@ -179,3 +179,27 @@ pub async fn get_mikrotik_leases(
     }
     return Ok(dhcp_leases);
 }
+
+//#[tokio::main]
+//pub async fn get_phpipam_existing_hosts(
+//    config_params: Vec<String>,
+//) -> Result<Vec<MikrotikLease>, Box<dyn Error>> {
+//    let mut dhcp_leases: Vec<MikrotikLease> = Vec::new();
+//    let client = reqwest::Client::new();
+//    let user_name: String = config_params[1].to_string();
+//    let password: Option<String> = Some(config_params[2].to_string());
+//
+//    let resp = client
+//        .get(format!(
+//            "{}{}{}",
+//            MIKROTIK_PROTO, config_params[0], MIKROTIK_DHCP_LEASES
+//        ))
+//        .basic_auth(user_name, password)
+//        .send()
+//        .await?
+//        .text()
+//        .await?;
+//    let hosts_json: Value = serde_json::from_str(resp.as_str()).unwrap();
+//    let hosts_vec: &Vec<Value> = hosts_json.as_array().unwrap();
+//
+//}
