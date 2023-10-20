@@ -1,11 +1,15 @@
 #[allow(dead_code)]
 pub mod conf;
-pub use conf::{MIKROTIK_DHCP_LEASES, MIKROTIK_PROTO, PHPIPAM_ADDRESS, PHPIPAM_REST_SUBNETS};
+pub use conf::{
+    MIKROTIK_DHCP_LEASES, MIKROTIK_PROTO, PHPIPAM_PROTO_ADDRESS, PHPIPAM_REST_ADDRESSES,
+    PHPIPAM_REST_SUBNETS,
+};
 pub mod structures;
 pub use structures::MikrotikLease;
 
 use config::{Config, File, FileFormat};
 //use reqwest::header::{HeaderMap, AUTHORIZATION, CONTENT_TYPE};
+use reqwest::header::{HeaderMap, CONTENT_TYPE};
 use serde_json::Value;
 use std::error::Error;
 
@@ -24,24 +28,28 @@ pub fn get_config_params(string_path: String) -> Result<Vec<String>, Box<dyn Err
     config_params.push(raw_conf.get("mikrotik_ip").unwrap());
     config_params.push(raw_conf.get("mikrotik_user").unwrap());
     config_params.push(raw_conf.get("mikrotik_password").unwrap());
+    config_params.push(raw_conf.get("mikrotik_dhcp_server").unwrap());
+    config_params.push(raw_conf.get("phpipam_token").unwrap());
     config_params.push(raw_conf.get("phpipam_subnet_id").unwrap());
     return Ok(config_params);
 }
 
 #[tokio::main]
 pub async fn get_mikrotik_leases(
-    config_params: Vec<String>,
+    ip: &String,
+    user: &String,
+    password: &String,
+    dhcp_server: &String,
 ) -> Result<Vec<MikrotikLease>, Box<dyn Error>> {
     let mut dhcp_leases: Vec<MikrotikLease> = Vec::new();
     let client = reqwest::Client::new();
-    let user_name: String = config_params[1].to_string();
-    let password: Option<String> = Some(config_params[2].to_string());
+    //let user_name: String = config_params[1].to_string();
+    let user_name: String = user.to_string();
+    //let password: Option<String> = Some(config_params[2].to_string());
+    let password: Option<String> = Some(password.to_string());
 
     let resp = client
-        .get(format!(
-            "{}{}{}",
-            MIKROTIK_PROTO, config_params[0], MIKROTIK_DHCP_LEASES
-        ))
+        .get(format!("{}{}{}", MIKROTIK_PROTO, ip, MIKROTIK_DHCP_LEASES))
         .basic_auth(user_name, password)
         .send()
         .await?
@@ -51,6 +59,115 @@ pub async fn get_mikrotik_leases(
     let hosts_vec: &Vec<Value> = hosts_json.as_array().unwrap();
 
     for i in hosts_vec.iter() {
+        //match i["server"].as_str() {
+        //    None => continue,
+        //    Some(x) => match x.as_str() {
+        //        dhcp_server.as_str() => {
+        //            let mut id: String = String::new();
+        //            match i[".id"].as_str() {
+        //                None => id.push_str("None"),
+        //                Some(x) => id.push_str(x),
+        //            }
+        //            let mut active_address: String = String::new();
+        //            match i["active-address"].as_str() {
+        //                None => active_address.push_str("None"),
+        //                Some(x) => active_address.push_str(x),
+        //            }
+        //            let mut active_client_id: String = String::new();
+        //            match i["active-client-id"].as_str() {
+        //                None => active_client_id.push_str("None"),
+        //                Some(x) => active_client_id.push_str(x),
+        //            }
+        //            let mut active_mac_address: String = String::new();
+        //            match i["active-mac-address"].as_str() {
+        //                None => active_mac_address.push_str("None"),
+        //                Some(x) => active_mac_address.push_str(x),
+        //            }
+        //            let mut active_server: String = String::new();
+        //            match i["active-server"].as_str() {
+        //                None => active_server.push_str("None"),
+        //                Some(x) => active_server.push_str(x),
+        //            }
+        //            let mut address: String = String::new();
+        //            match i["address"].as_str() {
+        //                None => address.push_str("None"),
+        //                Some(x) => address.push_str(x),
+        //            }
+        //            let mut address_lists: String = String::new();
+        //            match i["address-lists"].as_str() {
+        //                None => address_lists.push_str("None"),
+        //                Some(x) => address_lists.push_str(x),
+        //            }
+        //            let mut age: String = String::new();
+        //            match i["age"].as_str() {
+        //                None => age.push_str("None"),
+        //                Some(x) => age.push_str(x),
+        //            }
+        //            let mut blocked: String = String::new();
+        //            match i["blocked"].as_str() {
+        //                None => blocked.push_str("None"),
+        //                Some(x) => blocked.push_str(x),
+        //            }
+        //            let mut client_id: String = String::new();
+        //            match i["client-id"].as_str() {
+        //                None => client_id.push_str("None"),
+        //                Some(x) => client_id.push_str(x),
+        //            }
+        //            let mut dhcp_option: String = String::new();
+        //            match i["dhcp-option"].as_str() {
+        //                None => dhcp_option.push_str("None"),
+        //                Some(x) => dhcp_option.push_str(x),
+        //            }
+        //            let mut disabled: String = String::new();
+        //            match i["disabled"].as_str() {
+        //                None => disabled.push_str("None"),
+        //                Some(x) => disabled.push_str(x),
+        //            }
+        //            let mut dynamic: String = String::new();
+        //            match i["dynamic"].as_str() {
+        //                None => dynamic.push_str("None"),
+        //                Some(x) => dynamic.push_str(x),
+        //            }
+        //            let mut expires_after: String = String::new();
+        //            match i["expires-after"].as_str() {
+        //                None => expires_after.push_str("None"),
+        //                Some(x) => expires_after.push_str(x),
+        //            }
+        //            let mut host_name: String = String::new();
+        //            match i["host-name"].as_str() {
+        //                None => host_name.push_str("None"),
+        //                Some(x) => host_name.push_str(x),
+        //            }
+        //            let mut last_seen: String = String::new();
+        //            match i["last-seen"].as_str() {
+        //                None => last_seen.push_str("None"),
+        //                Some(x) => last_seen.push_str(x),
+        //            }
+        //            let mut mac_address: String = String::new();
+        //            match i["mac-address"].as_str() {
+        //                None => mac_address.push_str("None"),
+        //                Some(x) => mac_address.push_str(x),
+        //            }
+        //            let mut radius: String = String::new();
+        //            match i["radius"].as_str() {
+        //                None => radius.push_str("None"),
+        //                Some(x) => radius.push_str(x),
+        //            }
+        //            let mut server: String = String::new();
+        //            match i["server"].as_str() {
+        //                None => server.push_str("None"),
+        //                Some(x) => server.push_str(x),
+        //            }
+        //            let mut status: String = String::new();
+        //            match i["status"].as_str() {
+        //                None => status.push_str("None"),
+        //                Some(x) => status.push_str(x),
+        //            }
+        //        },
+        //        _ => continue,
+        //    },
+        //}
+
         let mut id: String = String::new();
         match i[".id"].as_str() {
             None => id.push_str("None"),
@@ -151,7 +268,8 @@ pub async fn get_mikrotik_leases(
             None => status.push_str("None"),
             Some(x) => status.push_str(x),
         }
-
+        
+        
         let host: MikrotikLease = MikrotikLease {
             id: id,
             active_address: active_address,
@@ -180,26 +298,64 @@ pub async fn get_mikrotik_leases(
     return Ok(dhcp_leases);
 }
 
-//#[tokio::main]
-//pub async fn get_phpipam_existing_hosts(
-//    config_params: Vec<String>,
-//) -> Result<Vec<MikrotikLease>, Box<dyn Error>> {
-//    let mut dhcp_leases: Vec<MikrotikLease> = Vec::new();
-//    let client = reqwest::Client::new();
-//    let user_name: String = config_params[1].to_string();
-//    let password: Option<String> = Some(config_params[2].to_string());
-//
-//    let resp = client
-//        .get(format!(
-//            "{}{}{}",
-//            MIKROTIK_PROTO, config_params[0], MIKROTIK_DHCP_LEASES
-//        ))
-//        .basic_auth(user_name, password)
-//        .send()
-//        .await?
-//        .text()
-//        .await?;
-//    let hosts_json: Value = serde_json::from_str(resp.as_str()).unwrap();
-//    let hosts_vec: &Vec<Value> = hosts_json.as_array().unwrap();
-//
-//}
+#[tokio::main]
+pub async fn del_phpipam_existing_hosts(
+    token: &String,
+    subnet_id: &String,
+) -> Result<(), Box<dyn Error>> {
+    let mut headers = HeaderMap::new();
+    headers.insert("token", token.parse().unwrap());
+    let client = reqwest::Client::new();
+
+    let _resp = client
+        .delete(format!(
+            "{}{}{}/truncate",
+            PHPIPAM_PROTO_ADDRESS, PHPIPAM_REST_SUBNETS, subnet_id
+        ))
+        .headers(headers.clone())
+        .send()
+        .await?
+        .text()
+        .await?;
+    //let hosts_json: Value = serde_json::from_str(resp.as_str()).unwrap();
+    //println!(
+    //    "######################### DELETE\n{:?}\n###################################\n",
+    //    hosts_json
+    //);
+    return Ok(());
+}
+
+#[tokio::main]
+pub async fn create_phpipam_host(
+    token: &String,
+    subnet_id: &String,
+    ip_address: &String,
+    hostname: &String,
+    mac_address: &String,
+) -> Result<(), Box<dyn Error>> {
+    let mut headers = HeaderMap::new();
+    headers.insert("token", token.parse().unwrap());
+    headers.insert(CONTENT_TYPE, format!("application/json").parse().unwrap());
+        let request_data = format!(
+        r#"{{"hostname":"{}","subnetId":"{}","ip":"{}","mac":"{}"}}"#,
+        hostname, subnet_id, ip_address, mac_address
+    );
+
+    //println!("{:?}", &request_data);
+    let client = reqwest::Client::new();
+
+    let _resp = client
+        .post(format!(
+            "{}{}",
+            PHPIPAM_PROTO_ADDRESS, PHPIPAM_REST_ADDRESSES
+        ))
+        .headers(headers.clone())
+        .body(request_data)
+        .send()
+        .await?
+        .text()
+        .await?;
+    //let hosts_json: Value = serde_json::from_str(resp.as_str()).unwrap();
+    //println!("{:?}", hosts_json);
+    return Ok(());
+}

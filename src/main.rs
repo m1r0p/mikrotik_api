@@ -28,27 +28,23 @@ fn main() {
     //for i in vec_config.iter() {
     //    println!("{}", i);
     //}
-    let mikrotik_leases: Vec<MikrotikLease> = get_mikrotik_leases(vec_config).unwrap();
-    for i in mikrotik_leases.iter() {
-        //let mut host_name: String = String::new();
-        //match &i.host_name {
-        //    Some(x) => host_name.push_str(x),
-        //    None => host_name.push_str("None"),
-        //}
-        //let mut active_address: String = String::new();
-        //match &i.active_address {
-        //    Some(x) => active_address.push_str(x),
-        //    None => active_address.push_str("None"),
-        //}
-        //let mut active_mac_address: String = String::new();
-        //match &i.active_mac_address {
-        //    Some(x) => active_mac_address.push_str(x),
-        //    None => active_mac_address.push_str("None"),
-        //}
 
-        println!(
-            "{}\t\t\t{}\t\t{}",
-            i.host_name, i.active_address, i.active_mac_address
+    let mikrotik_leases: Vec<MikrotikLease> =
+        get_mikrotik_leases(&vec_config[0], &vec_config[1], &vec_config[2], &vec_config[3]).unwrap();
+    let _ = del_phpipam_existing_hosts(&vec_config[4], &vec_config[5]);
+
+    for i in mikrotik_leases.iter() {
+        let _ = create_phpipam_host(
+            &vec_config[4],
+            &vec_config[5],
+            &i.address,
+            &i.host_name,
+            &i.mac_address,
         );
+        println!("{:?} - done", &i.address);
+        //println!(
+        //    "{}\t\t\t{}\t\t{}",
+        //    i.host_name, i.active_address, i.active_mac_address
+        //);
     }
 }
