@@ -29,8 +29,13 @@ fn main() {
     //    println!("{}", i);
     //}
 
-    let mikrotik_leases: Vec<MikrotikLease> =
-        get_mikrotik_leases(&vec_config[0], &vec_config[1], &vec_config[2], &vec_config[3]).unwrap();
+    let mikrotik_leases: Vec<MikrotikLease> = get_mikrotik_leases(
+        &vec_config[0],
+        &vec_config[1],
+        &vec_config[2],
+        &vec_config[3],
+    )
+    .unwrap();
     let _ = del_phpipam_existing_hosts(&vec_config[4], &vec_config[5]);
 
     for i in mikrotik_leases.iter() {
@@ -42,6 +47,7 @@ fn main() {
             &i.mac_address,
         );
         println!("{:?} - done", &i.address);
+        //println!("{} {}", &i.address, &i.server);
         //println!(
         //    "{}\t\t\t{}\t\t{}",
         //    i.host_name, i.active_address, i.active_mac_address
