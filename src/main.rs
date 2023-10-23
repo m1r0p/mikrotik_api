@@ -45,6 +45,8 @@ fn main() {
             &i.address,
             &i.host_name,
             &i.mac_address,
+            &i.status,
+            &i.dynamic,
         );
         println!("{:?} - done", &i.address);
         //println!("{} {}", &i.address, &i.server);
