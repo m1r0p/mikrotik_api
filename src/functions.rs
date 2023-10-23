@@ -367,7 +367,7 @@ pub async fn create_phpipam_host(
     let mut dynamic_edited: String = String::new();
     match dynamic {
         _ if dynamic == "true" => dynamic_edited.push_str("Dynamic"),
-        _ if dynamic == "false" => dynamic_edited.push_str("Static"),
+        _ if dynamic == "false" => dynamic_edited.push_str("Reserved"),
         _ => dynamic_edited.push_str("None"),
     }
     let mut state: u8 = 2; 
