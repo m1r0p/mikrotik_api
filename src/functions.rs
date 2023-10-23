@@ -7,7 +7,6 @@ pub mod structures;
 pub use structures::MikrotikLease;
 
 use config::{Config, File, FileFormat};
-//use reqwest::header::{HeaderMap, AUTHORIZATION, CONTENT_TYPE};
 use reqwest::header::{HeaderMap, CONTENT_TYPE};
 use serde_json::Value;
 use std::error::Error;
@@ -213,11 +212,6 @@ pub async fn del_phpipam_existing_hosts(
         .await?
         .text()
         .await?;
-    //let hosts_json: Value = serde_json::from_str(resp.as_str()).unwrap();
-    //println!(
-    //    "######################### DELETE\n{:?}\n###################################\n",
-    //    hosts_json
-    //);
     return Ok(());
 }
 
@@ -254,7 +248,6 @@ pub async fn create_phpipam_host(
         hostname, subnet_id, ip_address, mac_address, status, state, dynamic_edited
     );
 
-    //println!("{:?}", &request_data);
     let client = reqwest::Client::new();
 
     let _resp = client
@@ -265,7 +258,5 @@ pub async fn create_phpipam_host(
         .await?
         .text()
         .await?;
-    //let hosts_json: Value = serde_json::from_str(resp.as_str()).unwrap();
-    //println!("{:?}", hosts_json);
     return Ok(());
 }
