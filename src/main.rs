@@ -36,12 +36,13 @@ fn main() {
         &vec_config[3],
     )
     .unwrap();
-    let _ = del_phpipam_existing_hosts(&vec_config[4], &vec_config[5]);
+    let _ = del_phpipam_existing_hosts(&vec_config[4], &vec_config[5], &vec_config[6]);
 
     for i in mikrotik_leases.iter() {
         let _ = create_phpipam_host(
             &vec_config[4],
             &vec_config[5],
+            &vec_config[6],
             &i.address,
             &i.host_name,
             &i.mac_address,
