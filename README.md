@@ -14,7 +14,8 @@ or
 
 ### config example
 
-```{
+```
+{
     "mikrotik_ip":"",
     "mikrotik_user":"",
     "mikrotik_password":"",
@@ -22,7 +23,8 @@ or
     "phpipam_proto_address":"",
     "phpipam_token":"",
     "phpipam_subnet_id":""
-}```
+}
+```
 
 ## Links
 
