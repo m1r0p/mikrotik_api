@@ -35,6 +35,7 @@ fn main() {
             &i.mac_address,
             &i.status,
             &i.dynamic,
+            &i.comment,
         );
         println!("{:?} - done", &i.address);
     }

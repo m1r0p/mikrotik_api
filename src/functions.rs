@@ -55,6 +55,7 @@ pub async fn get_mikrotik_leases(
         .text()
         .await?;
     let hosts_json: Value = serde_json::from_str(resp.as_str()).unwrap();
+    //println!("{:?}", &hosts_json);
     let hosts_vec: &Vec<Value> = hosts_json.as_array().unwrap();
 
     for i in hosts_vec.iter() {
@@ -160,6 +161,12 @@ pub async fn get_mikrotik_leases(
                         Some(x) => status.push_str(x),
                     }
 
+                    let mut comment: String = String::new();
+                    match i["comment"].as_str() {
+                        None => comment.push_str("None"),
+                        Some(x) => comment.push_str(x),
+                    }
+
                     let host: MikrotikLease = MikrotikLease {
                         id: id,
                         active_address: active_address,
@@ -181,6 +188,7 @@ pub async fn get_mikrotik_leases(
                         radius: radius,
                         server: server,
                         status: status,
+                        comment: comment,
                     };
 
                     dhcp_leases.push(host);
@@ -225,6 +233,7 @@ pub async fn create_phpipam_host(
     mac_address: &String,
     status: &String,
     dynamic: &String,
+    comment: &String,
 ) -> Result<(), Box<dyn Error>> {
     let mut headers = HeaderMap::new();
     headers.insert("token", token.parse().unwrap());
@@ -235,6 +244,10 @@ pub async fn create_phpipam_host(
         _ if dynamic == "false" => dynamic_edited.push_str("Reserved"),
         _ => dynamic_edited.push_str("None"),
     }
+    let mut description: String = String::new();
+    if comment != "None" {
+        description.push_str(comment.as_str());
+    }
     let mut state: u8 = 2;
     if status == "waiting" && dynamic == "false" {
         state = 1;
@@ -244,8 +257,8 @@ pub async fn create_phpipam_host(
     }
 
     let request_data = format!(
-        r#"{{"hostname":"{}","subnetId":"{}","ip":"{}","mac":"{}","custom_Status":"{}","state":"{}","custom_Dynamic":"{}"}}"#,
-        hostname, subnet_id, ip_address, mac_address, status, state, dynamic_edited
+        r#"{{"hostname":"{}","subnetId":"{}","ip":"{}","description":"{}","mac":"{}","custom_Status":"{}","state":"{}","custom_Dynamic":"{}"}}"#,
+        hostname, subnet_id, ip_address, description, mac_address, status, state, dynamic_edited
     );
 
     let client = reqwest::Client::new();

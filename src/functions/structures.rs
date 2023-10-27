@@ -1,8 +1,8 @@
 //////// structures
 #[allow(dead_code)]
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct MikrotikLease {
     pub id: String,
     pub active_address: String,
@@ -24,4 +24,5 @@ pub struct MikrotikLease {
     pub radius: String,
     pub server: String,
     pub status: String,
+    pub comment: String,
 }
